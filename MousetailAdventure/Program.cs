@@ -12,14 +12,18 @@ namespace MousetailAdventure
     {
         static void Main(string[] args)
         {
+            Game g;
             if (args.Length >= 1)
             {
                 string finename = args[0];
                 TextReader s = File.OpenText(finename);
                 Console.SetIn(s);
+                g = new Game(true);
             }
-            Console.WriteLine(Console.OpenStandardInput());
-            Game g = new Game();
+            else
+            {
+                g = new Game(false);
+            }
             g.Init();
             g.Run();
         }

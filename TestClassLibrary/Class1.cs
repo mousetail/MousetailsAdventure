@@ -25,11 +25,14 @@ namespace MousetailsAdventureLib
 
         static Role[] rolesOrder = { Role.Region, Role.Actor, Role.Room, Role.PrimObj, Role.SecObj, Role.Other };
 
+        StreamWriter saveto;
+
         public Player player {get {
             return _player;}}
         private Player _player;
-        
-        public World():base()
+
+
+        public World(bool LoadingFile):base()
         {
             commands = new List<Command>(){
                 new Command(new StringMatcher("quit"), "quit"),
@@ -47,7 +50,14 @@ namespace MousetailsAdventureLib
             };
             _player = new Player();
 
+            
+
             Add(new BasicRulebook());
+
+            if (!LoadingFile)
+            {
+                saveto = new StreamWriter( File.Open("save.sav", FileMode.Create));
+            }
 
             Debug.WriteLine("fishy!");
         }
@@ -55,6 +65,11 @@ namespace MousetailsAdventureLib
 
         }
         public void quit(){
+            if (saveto!=null)
+            {
+                saveto.Flush();
+                saveto.Close();
+            }
             running=false;
         }
 
@@ -109,6 +124,10 @@ namespace MousetailsAdventureLib
                 else
                 {
                     interpretLine(s);
+                    if (saveto != null && running)
+                    {
+                        saveto.WriteLine(s);
+                    }
                 }
             }
         }
@@ -195,10 +214,6 @@ namespace MousetailsAdventureLib
             }
             return true;
         }
-    }
-    public struct fish
-    {
-        int size;
     }
     
     

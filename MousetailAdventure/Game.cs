@@ -9,11 +9,17 @@ namespace MousetailAdventure
 {
     class Game
     {
+        bool loadingfile;
+        public Game(bool loadingfile)
+        {
+            this.loadingfile = loadingfile;
+        }
+
         World w;
         public void Init()
         {
             
-            w = new World();
+            w = new World(loadingfile);
             Room bank = new Room(w, "the bank",
 @"Long room. Allong the sides are many cosics with
 tellers sleeping behind their desks. At at the north
@@ -33,7 +39,6 @@ carved wooden door") {w.player};
                     new MessageBeforeAndAfter())
             };
 
-            fish f=new fish();
             safe.Connect(bank,direction.North);
             sidewalk.Connect(bank, direction.South);
 
